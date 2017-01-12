@@ -9,7 +9,7 @@
     window.ga = window.ga || function () { (ga.q = ga.q || []).push(arguments); };
     ga.l = (new Date()).getTime();
     Polymer({
-      is: 'google-analytics',
+      is: 'google-analytics-tracker',
       properties: {
         gaCode: {
           type: String,
@@ -45,13 +45,28 @@
             return retVal;
           },
         },
+        socialNetwork: {
+          type: String,
+          notify: true,
+        },
+        socialAction: {
+          type: String,
+          notify: true,
+        },
+        socialTarget: {
+          type: String,
+          notify: true,
+        },
+
       },
       observers: [
-        '_createGa(gaCode)',
+        '_createTracker(gaCode)',
         '_sendPageview(page)',
         '_sendEvent(eventCategory, eventAction, eventLabel, eventValue, fieldsObject)',
+        '_sendSocial(socialNetwork, socialAction, socialTarget, fieldsObject)',
+        //'_sendScreenview' // need to understand this better
       ],
-      _createGa: function (gaCode) {
+      _createTracker: function (gaCode) {
         ga('create', gaCode, 'auto');
       },
       _sendPageview: function (page) {
@@ -61,6 +76,9 @@
       _sendEvent: function (eventCategory, eventAction, eventLabel, eventValue, fieldsObject) {
         ga('send', 'event', eventCategory, eventAction, eventLabel, eventValue, fieldsObject);
       },
+      _sendSocial: function (socialNetwork, socialAction, socialTarget, fieldsObject) {
+        ga('send', 'social', socialNetwork, socialAction, socialTarget, fieldsObject);
+      }
 
 
     });
