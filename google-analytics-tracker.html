@@ -57,14 +57,31 @@
           type: String,
           notify: true,
         },
-
+        timingCategory: {
+          type: String,
+          notify: true,
+        },
+        timingVar: {
+          type: String,
+          notify: true,
+        },
+        timingValue: {
+          type: Number,
+          notify: true,
+        },
+        timingLabel: {
+          type: String,
+          notify: true,
+        },
       },
       observers: [
         '_createTracker(gaCode)',
         '_sendPageview(page)',
         '_sendEvent(eventCategory, eventAction, eventLabel, eventValue, fieldsObject)',
         '_sendSocial(socialNetwork, socialAction, socialTarget, fieldsObject)',
-        //'_sendScreenview' // need to understand this better
+        // '_sendScreenview' // need to understand this better
+        '_sendTiming(timingCategory, timingVar, timingValue, timingLabel, fieldsObject)'
+        // '_sendException' // need to understand this better
       ],
       _createTracker: function (gaCode) {
         ga('create', gaCode, 'auto');
@@ -78,7 +95,10 @@
       },
       _sendSocial: function (socialNetwork, socialAction, socialTarget, fieldsObject) {
         ga('send', 'social', socialNetwork, socialAction, socialTarget, fieldsObject);
-      }
+      },
+      _sendTiming(timingCategory, timingVar, timingValue, timingLabel, fieldsObject) {
+        return ga('send', 'timing', timingCategory, timingVar, timingValue, timingLabel, fieldsObject);
+      },
 
 
     });
